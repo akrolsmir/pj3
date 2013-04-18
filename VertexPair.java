@@ -48,6 +48,10 @@ public class VertexPair {
 			return false;
 		}
 	}
+	
+	public String toString() {
+		return object1 + " " + object2;
+	}
 
 	/**
 	 * @param args

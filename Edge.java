@@ -38,8 +38,7 @@ public class Edge {
 	}
 
 	public String toString() {
-		return "Edge between " + vertexPair.object1 + " and "
-				+ vertexPair.object2 + ", weight: " + weight;
+		return "" + weight;
 	}
 
 	
