@@ -4,8 +4,8 @@ import list.*;
 
 public class Vertex {
 	
-	private DList<Object> adjacencyList;
-	private Object item;
+	protected DList<Object> adjacencyList;
+	protected Object item;
 	
 	/**
 	 * 
@@ -37,22 +37,6 @@ public class Vertex {
 				System.err.println(ex);
 			}
 		}
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public Object getItem(){
-		return item;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public DList<Object> getAdjacencyList(){
-		return adjacencyList;
 	}
 	
 	/**
