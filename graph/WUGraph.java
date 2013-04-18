@@ -2,6 +2,7 @@
 
 package graph;
 
+import list.*;
 import dict.HashTableChained;
 
 /**
@@ -13,14 +14,20 @@ public class WUGraph {
 	
 	private int vertexCount, edgeCount;
 	
+	HashTableChained vertexTable = new HashTableChained();
 	HashTableChained edgeTable = new HashTableChained();
+	
+	DList<Vertex> vertexList = new DList<Vertex>();
 
   /**
    * WUGraph() constructs a graph having no vertices or edges.
    *
    * Running time:  O(1).
    */
-  public WUGraph();
+  public WUGraph(){
+	  vertexCount = 0;
+	  edgeCount = 0;
+  }
 
   /**
    * vertexCount() returns the number of vertices in the graph.
@@ -52,7 +59,20 @@ public class WUGraph {
    *
    * Running time:  O(|V|).
    */
-  public Object[] getVertices();
+  public Object[] getVertices(){
+	  Object[] result = new Object[vertexCount];
+	  ListNode<Vertex> temp = vertexList.front();
+	  for(int i = 0; i < vertexCount; i++){
+		  try{
+			  result[i] = temp.item();
+			  temp = temp.next();
+		  } catch (InvalidNodeException e){
+			  System.err.println(e);
+			  return null;
+		  }
+	  }
+	  return result;
+  }
 
   /**
    * addVertex() adds a vertex (with no incident edges) to the graph.  The
@@ -61,7 +81,12 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public void addVertex(Object vertex);
+  public void addVertex(Object vertex){
+	  Vertex newVertex = new Vertex(vertex);
+	  vertexTable.insert(vertex, newVertex);
+	  vertexList.insertBack(newVertex);
+	  vertexCount++;
+  }
 
   /**
    * removeVertex() removes a vertex from the graph.  All edges incident on the
@@ -70,7 +95,9 @@ public class WUGraph {
    *
    * Running time:  O(d), where d is the degree of "vertex".
    */
-  public void removeVertex(Object vertex);
+  public void removeVertex(Object vertex){
+	  //TODO
+  }
 
   /**
    * isVertex() returns true if the parameter "vertex" represents a vertex of
@@ -78,7 +105,13 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public boolean isVertex(Object vertex);
+  public boolean isVertex(Object vertex){
+	  if(vertexTable.find(vertex) != null){
+		  return true;
+	  } else {
+		  return false;
+	  }
+  }
 
   /**
    * degree() returns the degree of a vertex.  Self-edges add only one to the
@@ -87,7 +120,14 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public int degree(Object vertex);
+  public int degree(Object vertex){
+	  Vertex v = (Vertex) vertexTable.find(vertex).value();
+	  if(v != null){
+		  return v.getAdjacencyList().length();
+	  } else {
+		  return 0;
+	  }
+  }
 
   /**
    * getNeighbors() returns a new Neighbors object referencing two arrays.  The
@@ -107,7 +147,10 @@ public class WUGraph {
    *
    * Running time:  O(d), where d is the degree of "vertex".
    */
-  public Neighbors getNeighbors(Object vertex);
+  public Neighbors getNeighbors(Object vertex){
+	  Neighbors result = new Neighbors();
+	  //TODO
+  }
 
   /**
    * addEdge() adds an edge (u, v) to the graph.  If either of the parameters
@@ -153,6 +196,12 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public int weight(Object u, Object v);
+  public int weight(Object u, Object v){
+	  if(isEdge(u, v)){
+		  return 
+	  } else {
+		  return 0;
+	  }
+  }
 
 }
