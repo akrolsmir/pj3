@@ -2,12 +2,18 @@
 
 package graph;
 
+import dict.HashTableChained;
+
 /**
  * The WUGraph class represents a weighted, undirected graph.  Self-edges are
  * permitted.
  */
 
 public class WUGraph {
+	
+	private int vertexCount, edgeCount;
+	
+	HashTableChained edgeTable = new HashTableChained();
 
   /**
    * WUGraph() constructs a graph having no vertices or edges.
@@ -21,14 +27,18 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public int vertexCount();
+  public int vertexCount(){
+	  return vertexCount;
+  }
 
   /**
    * edgeCount() returns the number of edges in the graph.
    *
    * Running time:  O(1).
    */
-  public int edgeCount();
+  public int edgeCount(){
+	  return edgeCount;
+  }
 
   /**
    * getVertices() returns an array containing all the objects that serve
