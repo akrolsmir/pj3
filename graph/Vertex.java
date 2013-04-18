@@ -4,7 +4,7 @@ import list.*;
 
 public class Vertex {
 	
-	protected DList<Object> adjacencyList;
+	protected DList<Edge> adjacencyList;
 	protected Object item;
 	
 	/**
@@ -12,7 +12,7 @@ public class Vertex {
 	 * @param o
 	 */
 	public Vertex(Object o){
-		adjacencyList = new DList<Object>();
+		adjacencyList = new DList<Edge>();
 		item = o;
 	}
 	
@@ -20,16 +20,16 @@ public class Vertex {
 	 * 
 	 * @param e
 	 */
-	public void addEdge(Object e){
-		adjacencyList.insertBack(e);
+	public ListNode<Edge> addEdge(Edge e){
+		return adjacencyList.insertBack(e);
 	}
 	
 	/**
 	 * 
 	 * @param e
 	 */
-	public void removeEdge(Object e){
-		ListNode<Object> edge = getEdge(e);
+	public void removeEdge(Edge e){
+		ListNode<Edge> edge = getEdge(e);
 		if(edge != null){
 			try{
 				edge.remove();
@@ -41,11 +41,30 @@ public class Vertex {
 	
 	/**
 	 * 
+<<<<<<< HEAD
+=======
+	 * @return
+	 */
+	public Object getItem(){
+		return item;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public DList<Edge> getAdjacencyList(){
+		return adjacencyList;
+	}
+	
+	/**
+	 * 
+>>>>>>> Implement add and removeEdge
 	 * @param e
 	 * @return
 	 */
-	private ListNode<Object> getEdge(Object e){
-		ListNode<Object> temp = adjacencyList.front();
+	private ListNode<Edge> getEdge(Edge e){
+		ListNode<Edge> temp = adjacencyList.front();
 		try{
 			while(temp.item() != e || temp.isValidNode()){
 				temp = temp.next();

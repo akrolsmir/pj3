@@ -86,13 +86,15 @@ public class DList<T> extends List<T> {
 	 *            is the item to be inserted.
 	 * 
 	 *            Performance: runs in O(1) time.
+	 * @return 
 	 **/
-	public void insertBack(T item) {
+	public DListNode<T> insertBack(T item) {
 		// head.insertBefore(item);
 		DListNode<T> newNode = newNode(item, this, head.prev, head);
 		head.prev.next = newNode;
 		head.prev = newNode;
 		size++;
+		return newNode;
 	}
 
 	/**

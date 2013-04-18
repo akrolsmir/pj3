@@ -53,7 +53,7 @@ public abstract class List<T> implements Iterable<T> {
    *
    *  @param item is the item to be inserted.
    **/
-  public abstract void insertBack(T item);
+  public abstract ListNode<T> insertBack(T item);
 
   /**
    *  front() returns the node at the front of this List.  If the List is
