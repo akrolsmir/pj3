@@ -183,7 +183,7 @@ public class WUGraph {
 			  try{
 				  weightList[i] = temp.item().weight;
 				  Edge tempEdge = temp.item();
-				  if(tempEdge.vertexPair.object1 == v){
+				  if(tempEdge.vertexPair.object1 == vertex){
 					  neighborList[i] = tempEdge.vertexPair.object2;
 				  } else {
 					  neighborList[i] = tempEdge.vertexPair.object1;
