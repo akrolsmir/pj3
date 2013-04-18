@@ -238,7 +238,9 @@ public class WUGraph {
 		VertexPair key = new VertexPair(u, v);
 		try {
 			edgeTable.remove(key).remove();
-			edgeTable.remove(key).remove();
+			if(u != v){
+				edgeTable.remove(key).remove();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -274,7 +276,12 @@ public class WUGraph {
    */
   public int weight(Object u, Object v){
 	  if(isEdge(u, v)){
-		  return edgeTable.find(new VertexPair(u, v)).item().weight;
+		  try {
+			return edgeTable.find(new VertexPair(u, v)).item().weight;
+		  } catch (InvalidNodeException e) {
+			  System.out.println(e);
+			  return 0;
+		  }
 	  } else {
 		  return 0;
 	  }
