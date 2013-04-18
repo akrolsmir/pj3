@@ -122,8 +122,8 @@ public class WUGraph {
    * Running time:  O(1).
    */
   public int degree(Object vertex){
-	  Vertex v = (Vertex) vertexTable.find(vertex);
-	  if(v != null){
+	  if(isVertex(vertex)){
+		  Vertex v = (Vertex) vertexTable.find(vertex);
 		  return v.getAdjacencyList().length();
 	  } else {
 		  return 0;
@@ -150,7 +150,31 @@ public class WUGraph {
    */
   public Neighbors getNeighbors(Object vertex){
 	  Neighbors result = new Neighbors();
-	  //TODO
+	  if(isVertex(vertex)){
+		  Vertex v = (Vertex) vertexTable.find(vertex);
+		  Object[] neighborList = new Object[v.getAdjacencyList().length()];
+		  int[] weightList = new int[v.getAdjacencyList().length()];
+		  ListNode<Object> temp = v.getAdjacencyList().front();
+		  for(int i = 0; i < neighborList.length; i++){
+			  try{
+				  weightList[i] = ((Edge) temp.item()).weight;
+				  Edge tempEdge = (Edge) temp.item();
+				  if(tempEdge.vertexPair.object1 == v){
+					  neighborList[i] = tempEdge.vertexPair.object2;
+				  } else {
+					  neighborList[i] = tempEdge.vertexPair.object1;
+				  }
+				  temp = temp.next();
+			  } catch (InvalidNodeException e){
+				  System.err.println(e);
+			  }
+		  }
+		  result.neighborList = neighborList;
+		  result.weightList = weightList;
+		  return result;
+	  } else {
+		  return null;
+	  }
   }
 
   /**
