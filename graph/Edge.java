@@ -54,13 +54,5 @@ public class Edge {
 		return "Edge between " + vertexPair.object1 + " and "
 				+ vertexPair.object2 + ", weight: " + weight;
 	}
-	
-	public boolean equals(Object edge) {
-		if (edge instanceof Edge) {
-			return vertexPair.equals(((Edge) edge).vertexPair);
-		} else {
-			return false;
-		}
-	}
 
 }

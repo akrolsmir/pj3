@@ -64,7 +64,7 @@ public class WUGraph {
 	  ListNode<Vertex> temp = vertexList.front();
 	  for(int i = 0; i < vertexCount; i++){
 		  try{
-			  result[i] = ((Vertex)temp.item()).item;
+			  result[i] = temp.item().item;
 			  temp = temp.next();
 		  } catch (InvalidNodeException e){
 			  System.err.println(e);
@@ -211,17 +211,28 @@ public class WUGraph {
    * Running time:  O(1).
    */
   public void addEdge(Object u, Object v, int weight){
-	  Edge edge = new Edge(u, v, weight);
 	  VertexPair key = new VertexPair(u, v);
-	  ListNode<Edge> node1 = vertexTable.find(u).addEdge(edge);
-	  edgeTable.insert(key, node1);
-	  //If u and v are not the same
-	  if(!u.equals(v)){
-		  ListNode<Edge> node2 = vertexTable.find(v).addEdge(edge);
-		  edgeTable.insert(key, node2);
-	  }
-	  edgeCount++;
-  }
+		if (isEdge(u, v)) {
+			// Edge already present, update the weights
+			try {
+				edgeTable.find(key).item().weight = weight;
+			} catch (InvalidNodeException e) {
+				//Shouldn't ever hit this
+			}
+		}
+		else {
+			//Add a new edge
+			Edge edge = new Edge(u, v, weight);
+			ListNode<Edge> node1 = vertexTable.find(u).addEdge(edge);
+			edgeTable.insert(key, node1);
+			//If u and v are not the same
+			if (!u.equals(v)) {
+				ListNode<Edge> node2 = vertexTable.find(v).addEdge(edge);
+				edgeTable.insert(key, node2);
+			}
+			edgeCount++;
+		}
+	}
 
   /**
    * removeEdge() removes an edge (u, v) from the graph.  If either of the
@@ -242,7 +253,7 @@ public class WUGraph {
 				edgeTable.remove(key).remove();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			// Means that the second remove was unneeded.
 		}
 		vertexTable.find(v);
 		// remove edge from the lists
@@ -274,17 +285,15 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public int weight(Object u, Object v){
-	  if(isEdge(u, v)){
-		  try {
-			return edgeTable.find(new VertexPair(u, v)).item().weight;
-		  } catch (InvalidNodeException e) {
-			  System.out.println(e);
-			  return 0;
-		  }
-	  } else {
-		  return 0;
-	  }
-  }
+	public int weight(Object u, Object v) {
+		if (isEdge(u, v)) {
+			try {
+				return edgeTable.find(new VertexPair(u, v)).item().weight;
+			} catch (InvalidNodeException e) {
+				e.printStackTrace();
+			}
+		}
+		return 0;
+	}
 
 }
