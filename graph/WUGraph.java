@@ -65,7 +65,7 @@ public class WUGraph {
 	  ListNode<Vertex> temp = vertexList.front();
 	  for(int i = 0; i < vertexCount; i++){
 		  try{
-			  result[i] = temp.item();
+			  result[i] = ((Vertex)temp.item()).item;
 			  temp = temp.next();
 		  } catch (InvalidNodeException e){
 			  System.err.println(e);
@@ -83,10 +83,12 @@ public class WUGraph {
    * Running time:  O(1).
    */
   public void addVertex(Object vertex){
-	  Vertex newVertex = new Vertex(vertex);
-	  vertexTable.insert(vertex, newVertex);
-	  vertexList.insertBack(newVertex);
-	  vertexCount++;
+	  if(vertexTable.find(vertex) == null){
+		  Vertex newVertex = new Vertex(vertex);
+		  vertexTable.insert(vertex, newVertex);
+		  vertexList.insertBack(newVertex);
+		  vertexCount++;
+	  }
   }
 
   /**
@@ -97,7 +99,28 @@ public class WUGraph {
    * Running time:  O(d), where d is the degree of "vertex".
    */
   public void removeVertex(Object vertex){
-	  //TODO
+	  Vertex v = vertexTable.find(vertex);
+	  if(v != null){
+		  DList<Object> edges = v.adjacencyList;
+		  for(Object e : edges){
+			  Edge edge = (Edge) e;
+			  removeEdge(edge.vertexPair.object1, edge.vertexPair.object2);
+		  }
+		  try{
+			  ListNode<Vertex> temp = vertexList.front();
+			  while(temp.isValidNode()){
+				  if(temp.item() == v){
+					  temp.remove();
+					  break;
+				  }
+				  temp = temp.next();
+			  }
+		  } catch (InvalidNodeException e){
+			  System.err.println(e);
+		  }
+		  vertexTable.remove(vertex);
+		  vertexCount--;
+	  }
   }
 
   /**
@@ -124,7 +147,7 @@ public class WUGraph {
   public int degree(Object vertex){
 	  if(isVertex(vertex)){
 		  Vertex v = (Vertex) vertexTable.find(vertex);
-		  return v.getAdjacencyList().length();
+		  return v.adjacencyList.length();
 	  } else {
 		  return 0;
 	  }
@@ -152,9 +175,12 @@ public class WUGraph {
 	  Neighbors result = new Neighbors();
 	  if(isVertex(vertex)){
 		  Vertex v = (Vertex) vertexTable.find(vertex);
-		  Object[] neighborList = new Object[v.getAdjacencyList().length()];
-		  int[] weightList = new int[v.getAdjacencyList().length()];
-		  ListNode<Object> temp = v.getAdjacencyList().front();
+		  if(v.adjacencyList.length() == 0){
+			  return null;
+		  }
+		  Object[] neighborList = new Object[v.adjacencyList.length()];
+		  int[] weightList = new int[v.adjacencyList.length()];
+		  ListNode<Object> temp = v.adjacencyList.front();
 		  for(int i = 0; i < neighborList.length; i++){
 			  try{
 				  weightList[i] = ((Edge) temp.item()).weight;
@@ -188,7 +214,7 @@ public class WUGraph {
    */
   public void addEdge(Object u, Object v, int weight){
 	  Edge edge = new Edge(u, v, weight);
-	  edgeSet.insert(t);
+	  //edgeSet.insert(t);
 	  //TODO add the edge to the adjacency list
   }
 
@@ -200,7 +226,9 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public void removeEdge(Object u, Object v);
+  public void removeEdge(Object u, Object v){
+	  
+  }
 
   /**
    * isEdge() returns true if (u, v) is an edge of the graph.  Returns false
