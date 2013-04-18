@@ -12,10 +12,10 @@ import dict.HashTableChained;
 
 public class WUGraph {
 	
-	private int vertexCount, edgeCount;
-	
-	HashTableChained<Object, Vertex> vertexTable = new HashTableChained<Object, Vertex>();
-	HashTableChained<VertexPair, ListNode<Edge>> edgeTable = new HashTableChained<VertexPair, ListNode<Edge>>();
+	private int vertexCount = 0, edgeCount = 0;
+
+	private HashTableChained<Object, Vertex> vertexTable = new HashTableChained<Object, Vertex>();
+	private HashTableChained<VertexPair, ListNode<Edge>> edgeTable = new HashTableChained<VertexPair, ListNode<Edge>>();
 	
 	DList<Vertex> vertexList = new DList<Vertex>();
 
@@ -25,8 +25,6 @@ public class WUGraph {
    * Running time:  O(1).
    */
   public WUGraph(){
-	  vertexCount = 0;
-	  edgeCount = 0;
   }
 
   /**
@@ -61,15 +59,10 @@ public class WUGraph {
    */
   public Object[] getVertices(){
 	  Object[] result = new Object[vertexCount];
-	  ListNode<Vertex> temp = vertexList.front();
-	  for(int i = 0; i < vertexCount; i++){
-		  try{
-			  result[i] = temp.item().item;
-			  temp = temp.next();
-		  } catch (InvalidNodeException e){
-			  System.err.println(e);
-			  return null;
-		  }
+	  int i = 0;
+	  for(Vertex vertex : vertexList){
+		  result[i] = vertex.item;
+		  i++;
 	  }
 	  return result;
   }
@@ -82,7 +75,7 @@ public class WUGraph {
    * Running time:  O(1).
    */
   public void addVertex(Object vertex){
-	  if(vertexTable.find(vertex) == null){
+	  if(!isVertex(vertex)){
 		  Vertex newVertex = new Vertex(vertex);
 		  vertexTable.insert(vertex, newVertex);
 		  vertexList.insertBack(newVertex);
@@ -105,6 +98,7 @@ public class WUGraph {
 			  removeEdge(edge.vertexPair.object1, edge.vertexPair.object2);
 		  }
 		  try{
+			  //TODO fix to run in O(1)
 			  ListNode<Vertex> temp = vertexList.front();
 			  while(temp.isValidNode()){
 				  if(temp.item() == v){
@@ -128,11 +122,7 @@ public class WUGraph {
    * Running time:  O(1).
    */
   public boolean isVertex(Object vertex){
-	  if(vertexTable.find(vertex) != null){
-		  return true;
-	  } else {
-		  return false;
-	  }
+	  return vertexTable.find(vertex) != null;
   }
 
   /**
@@ -178,20 +168,11 @@ public class WUGraph {
 		  }
 		  Object[] neighborList = new Object[v.adjacencyList.length()];
 		  int[] weightList = new int[v.adjacencyList.length()];
-		  ListNode<Edge> temp = v.adjacencyList.front();
-		  for(int i = 0; i < neighborList.length; i++){
-			  try{
-				  weightList[i] = temp.item().weight;
-				  Edge tempEdge = temp.item();
-				  if(tempEdge.vertexPair.object1 == vertex){
-					  neighborList[i] = tempEdge.vertexPair.object2;
-				  } else {
-					  neighborList[i] = tempEdge.vertexPair.object1;
-				  }
-				  temp = temp.next();
-			  } catch (InvalidNodeException e){
-				  System.err.println(e);
-			  }
+		  int i = 0;
+		  for(Edge edge : v.adjacencyList){
+			  weightList[i] = edge.weight;
+			  Object v1 = edge.vertexPair.object1, v2 = edge.vertexPair.object1;
+			  neighborList[i] = v == v1 ? v2 : v1;
 		  }
 		  result.neighborList = neighborList;
 		  result.weightList = weightList;
@@ -221,11 +202,11 @@ public class WUGraph {
 			}
 		}
 		else {
-			//Add a new edge
+			// Add the edge to edgeTable and u's adjacency list
 			Edge edge = new Edge(u, v, weight);
 			ListNode<Edge> node1 = vertexTable.find(u).addEdge(edge);
 			edgeTable.insert(key, node1);
-			//If u and v are not the same
+			//If u and v are not the same, add edge into edgeTable again, add to v's adjacency list
 			if (!u.equals(v)) {
 				ListNode<Edge> node2 = vertexTable.find(v).addEdge(edge);
 				edgeTable.insert(key, node2);
@@ -256,7 +237,6 @@ public class WUGraph {
 			// Means that the second remove was unneeded.
 		}
 		vertexTable.find(v);
-		// remove edge from the lists
 		edgeCount--;
   }
 
@@ -295,5 +275,4 @@ public class WUGraph {
 		}
 		return 0;
 	}
-
 }
