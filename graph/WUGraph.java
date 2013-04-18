@@ -15,9 +15,9 @@ public class WUGraph {
 	private int vertexCount = 0, edgeCount = 0;
 
 	private HashTableChained<Object, Vertex> vertexTable = new HashTableChained<Object, Vertex>();
-	private HashTableChained<VertexPair, ListNode<Edge>> edgeTable = new HashTableChained<VertexPair, ListNode<Edge>>();
+	private HashTableChained<VertexPair, Edge> edgeTable = new HashTableChained<VertexPair, Edge>();
 	
-	DList<Vertex> vertexList = new DList<Vertex>();
+	private DList<Vertex> vertexList = new DList<Vertex>();
 
   /**
    * WUGraph() constructs a graph having no vertices or edges.
@@ -76,9 +76,8 @@ public class WUGraph {
    */
   public void addVertex(Object vertex){
 	  if(!isVertex(vertex)){
-		  Vertex newVertex = new Vertex(vertex);
+		  Vertex newVertex = new Vertex(vertex, vertexList);
 		  vertexTable.insert(vertex, newVertex);
-		  vertexList.insertBack(newVertex);
 		  vertexCount++;
 	  }
   }
@@ -97,20 +96,7 @@ public class WUGraph {
 		  for(Edge edge : edges){
 			  removeEdge(edge.vertexPair.object1, edge.vertexPair.object2);
 		  }
-		  try{
-			  //TODO fix to run in O(1)
-			  ListNode<Vertex> temp = vertexList.front();
-			  while(temp.isValidNode()){
-				  if(temp.item() == v){
-					  temp.remove();
-					  break;
-				  }
-				  temp = temp.next();
-			  }
-		  } catch (InvalidNodeException e){
-			  System.err.println(e);
-		  }
-		  vertexTable.remove(vertex);
+		  vertexTable.remove(vertex).removeFromList();
 		  vertexCount--;
 	  }
   }
@@ -160,27 +146,21 @@ public class WUGraph {
    * Running time:  O(d), where d is the degree of "vertex".
    */
   public Neighbors getNeighbors(Object vertex){
-	  Neighbors result = new Neighbors();
-	  if(isVertex(vertex)){
-		  Vertex v = vertexTable.find(vertex);
-		  if(v.adjacencyList.length() == 0){
-			  return null;
-		  }
-		  Object[] neighborList = new Object[v.adjacencyList.length()];
-		  int[] weightList = new int[v.adjacencyList.length()];
-		  int i = 0;
-		  for(Edge edge : v.adjacencyList){
-			  weightList[i] = edge.weight;
-			  Object v1 = edge.vertexPair.object1, v2 = edge.vertexPair.object1;
-			  neighborList[i] = v == v1 ? v2 : v1;
-		  }
-		  result.neighborList = neighborList;
-		  result.weightList = weightList;
-		  return result;
-	  } else {
-		  return null;
-	  }
-  }
+		if (degree(vertex) == 0) {
+			return null;
+		}
+		Neighbors result = new Neighbors();
+		result.neighborList = new Object[degree(vertex)];
+		result.weightList = new int[degree(vertex)];
+		int i = 0;
+		for (Edge edge : vertexTable.find(vertex).adjacencyList) {
+			result.weightList[i] = edge.weight;
+			Object v1 = edge.vertexPair.object1, v2 = edge.vertexPair.object2;
+			result.neighborList[i] = v1 == vertex ? v2 : v1;
+			i++;
+		}
+		return result;
+	}
 
   /**
    * addEdge() adds an edge (u, v) to the graph.  If either of the parameters
@@ -192,25 +172,14 @@ public class WUGraph {
    * Running time:  O(1).
    */
   public void addEdge(Object u, Object v, int weight){
-	  VertexPair key = new VertexPair(u, v);
 		if (isEdge(u, v)) {
 			// Edge already present, update the weights
-			try {
-				edgeTable.find(key).item().weight = weight;
-			} catch (InvalidNodeException e) {
-				//Shouldn't ever hit this
-			}
+			edgeTable.find(new VertexPair(u, v)).weight = weight;
 		}
 		else {
-			// Add the edge to edgeTable and u's adjacency list
-			Edge edge = new Edge(u, v, weight);
-			ListNode<Edge> node1 = vertexTable.find(u).addEdge(edge);
-			edgeTable.insert(key, node1);
-			//If u and v are not the same, add edge into edgeTable again, add to v's adjacency list
-			if (!u.equals(v)) {
-				ListNode<Edge> node2 = vertexTable.find(v).addEdge(edge);
-				edgeTable.insert(key, node2);
-			}
+			// Construct the edge and add it to edgeTable
+			Edge edge = new Edge(vertexTable.find(u), vertexTable.find(v), weight);
+			edgeTable.insert(new VertexPair(u, v), edge);
 			edgeCount++;
 		}
 	}
@@ -227,16 +196,7 @@ public class WUGraph {
 		if (!isEdge(u, v)) {
 			return;
 		}
-		VertexPair key = new VertexPair(u, v);
-		try {
-			edgeTable.remove(key).remove();
-			if(u != v){
-				edgeTable.remove(key).remove();
-			}
-		} catch (Exception e) {
-			// Means that the second remove was unneeded.
-		}
-		vertexTable.find(v);
+		edgeTable.remove(new VertexPair(u, v)).removefromLists();
 		edgeCount--;
   }
 
@@ -267,11 +227,7 @@ public class WUGraph {
    */
 	public int weight(Object u, Object v) {
 		if (isEdge(u, v)) {
-			try {
-				return edgeTable.find(new VertexPair(u, v)).item().weight;
-			} catch (InvalidNodeException e) {
-				e.printStackTrace();
-			}
+			return edgeTable.find(new VertexPair(u, v)).weight;
 		}
 		return 0;
 	}

@@ -1,41 +1,21 @@
 package graph;
 
+import list.InvalidNodeException;
+import list.ListNode;
+
 public class Edge {
 
 	protected VertexPair vertexPair;
-	protected Edge partner;
 	protected int weight;
-
-	//  Implementation such that creating one edge creates its partner
-	//	private Edge(Object vertex1, Object vertex2, int weight, Edge partner) {
-	//		vertexPair = new VertexPair(vertex1, vertex2);
-	//		this.weight = weight;
-	//		if (partner == null) {
-	//			partner = new Edge(vertex1, vertex2, weight, this);
-	//		}
-	//	}
-	//
-	//	public Edge(Object vertex1, Object vertex2, int weight) {
-	//		this(vertex1, vertex2, weight, null);
-	//	}
-
-	public Edge(Object vertex1, Object vertex2, int weight) {
-		vertexPair = new VertexPair(vertex1, vertex2);
+	protected ListNode<Edge> node1, node2; 
+	
+	public Edge(Vertex v1, Vertex v2, int weight){
+		vertexPair = new VertexPair(v1.item, v2.item);
 		this.weight = weight;
-	}
-
-	/**
-	 * @param vertex1
-	 * @param vertex2
-	 * @param weight
-	 * @return an array of size 2 containing the two newly formed Edges
-	 */
-	public static Edge[] makeEdges(Object vertex1, Object vertex2, int weight) {
-		Edge edge1 = new Edge(vertex1, vertex2, weight);
-		Edge edge2 = new Edge(vertex1, vertex2, weight);
-		edge1.partner = edge2;
-		edge2.partner = edge1;
-		return new Edge[] { edge1, edge2 };
+		node1 = v1.adjacencyList.insertBack(this);
+		if (!v1.equals(v2)) {
+			node2 = v2.adjacencyList.insertBack(this);
+		}
 	}
 
 	@Override
@@ -53,6 +33,17 @@ public class Edge {
 	public String toString() {
 		return "Edge between " + vertexPair.object1 + " and "
 				+ vertexPair.object2 + ", weight: " + weight;
+	}
+
+	public void removefromLists() {
+		try {
+			node1.remove();
+			node2.remove();
+		} catch (NullPointerException npe) {
+			// Null pointer? No problem!
+		} catch (InvalidNodeException e) {
+			// Should not occur
+		}
 	}
 
 }
