@@ -42,6 +42,7 @@ public class Edge {
 				+ vertexPair.object2 + ", weight: " + weight;
 	}
 
+	
 	public boolean equals(Object edge) {
 		if (edge instanceof Edge) {
 			return vertexPair.equals(((Edge) edge).vertexPair);
