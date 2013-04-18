@@ -27,6 +27,10 @@ public class Vertex {
 		}
 	}
 	
+	public Object getItem(){
+		return item;
+	}
+	
 	public DList<Object> getAdjacencyList(){
 		return adjacencyList;
 	}
