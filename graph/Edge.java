@@ -38,6 +38,18 @@ public class Edge {
 		return new Edge[] { edge1, edge2 };
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof Edge
+				&& vertexPair.equals(((Edge) obj).vertexPair);
+	}
+
+	@Override
+	public int hashCode() {
+		return vertexPair.hashCode();
+	}
+
+	@Override
 	public String toString() {
 		return "Edge between " + vertexPair.object1 + " and "
 				+ vertexPair.object2 + ", weight: " + weight;

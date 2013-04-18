@@ -76,4 +76,10 @@ public class Vertex {
 			return null;
 		}
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof Vertex
+				&& item.equals(((Vertex) obj).item);
+	}
 }
