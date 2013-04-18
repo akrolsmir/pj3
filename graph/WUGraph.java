@@ -3,6 +3,7 @@
 package graph;
 
 import list.*;
+import dict.HashSetChained;
 import dict.HashTableChained;
 
 /**
@@ -14,8 +15,8 @@ public class WUGraph {
 	
 	private int vertexCount, edgeCount;
 	
-	HashTableChained vertexTable = new HashTableChained();
-	HashTableChained edgeTable = new HashTableChained();
+	HashTableChained<Object, Vertex> vertexTable = new HashTableChained<Object, Vertex>();
+	HashTableChained<VertexPair, Edge> edgeTable = new HashTableChained<VertexPair, Edge>();
 	
 	DList<Vertex> vertexList = new DList<Vertex>();
 
@@ -121,7 +122,7 @@ public class WUGraph {
    * Running time:  O(1).
    */
   public int degree(Object vertex){
-	  Vertex v = (Vertex) vertexTable.find(vertex).value();
+	  Vertex v = (Vertex) vertexTable.find(vertex);
 	  if(v != null){
 		  return v.getAdjacencyList().length();
 	  } else {
@@ -158,10 +159,14 @@ public class WUGraph {
    * The edge is assigned a weight of "weight".  If the edge is already
    * contained in the graph, the weight is updated to reflect the new value.
    * Self-edges (where u == v) are allowed.
-   *
+   *t
    * Running time:  O(1).
    */
-  public void addEdge(Object u, Object v, int weight);
+  public void addEdge(Object u, Object v, int weight){
+	  Edge edge = new Edge(u, v, weight);
+	  edgeSet.insert(t);
+	  //TODO add the edge to the adjacency list
+  }
 
   /**
    * removeEdge() removes an edge (u, v) from the graph.  If either of the
@@ -180,7 +185,9 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public boolean isEdge(Object u, Object v);
+  public boolean isEdge(Object u, Object v){
+	  return edgeTable.find(new VertexPair(u, v)) != null;
+  }
 
   /**
    * weight() returns the weight of (u, v).  Returns zero if (u, v) is not
@@ -198,7 +205,7 @@ public class WUGraph {
    */
   public int weight(Object u, Object v){
 	  if(isEdge(u, v)){
-		  return 
+		  return edgeTable.find(new VertexPair(u, v)).weight;
 	  } else {
 		  return 0;
 	  }

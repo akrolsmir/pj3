@@ -150,6 +150,18 @@ public class HashSetChained<T> {
 		// Either no list, or key not in list
 		return null;
 	}
+	
+	public boolean contains(T t){
+		try {
+			List<T> list = table[compFunction(t.hashCode())];
+			for (T item : list)
+				if (t.equals(item))
+					return true;
+		} catch (NullPointerException e) {
+		}
+		// Either no list, or key not in list
+		return false;
+	}
 
 	/**
 	 * Remove an entry with the specified key. If such an entry is found, remove
@@ -207,9 +219,11 @@ public class HashSetChained<T> {
 		h.insert("Hello");
 		h.insert("HI");
 		System.out.println(h.size());
-		System.out.println(h.find("hi"));
+		System.out.println(h.find("HELLO"));
+		System.out.println(h.contains("Hello"));
 		h.makeEmpty();
 		System.out.println(h.size);
+		System.out.println(h.contains("Hello"));
 		
 //		HashTableChained h = new HashTableChained();
 //		h.insert("key0", "value0");

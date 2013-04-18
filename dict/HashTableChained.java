@@ -18,16 +18,16 @@ import list.List;
  * DO NOT CHANGE ANY PROTOTYPES IN THIS FILE.
  **/
 
-public class HashTableChained implements Dictionary {
+public class HashTableChained<K, V> {
 
 	/**
 	 * Place any data fields here.
 	 **/
-	private List<Entry>[] table;
+	private List<Entry<K, V>>[] table;
 	private int size = 0;
 
-	private class DEntry extends Entry {
-		public DEntry(Object key, Object value) {
+	private class DEntry<K, V> extends Entry<K, V> {
+		public DEntry(K key, V value) {
 			this.key = key;
 			this.value = value;
 		}
@@ -71,7 +71,7 @@ public class HashTableChained implements Dictionary {
 	public int getCollisions()
 	{
 		int lists = 0;
-		for(List<Entry> list : table ){
+		for(List<Entry<K, V>> list : table ){
 			if(list != null)
 				lists++;
 		}
@@ -127,11 +127,11 @@ public class HashTableChained implements Dictionary {
 	 * @return an entry containing the key and value.
 	 **/
 
-	public Entry insert(Object key, Object value) {
-		Entry entry = new DEntry(key, value);
+	public Entry<K, V> insert(K key, V value) {
+		Entry<K, V> entry = new DEntry<K, V>(key, value);
 		int comp = compFunction(key.hashCode());
 		if (table[comp] == null)
-			table[comp] = new DList<Entry>();
+			table[comp] = new DList<Entry<K, V>>();
 		table[comp].insertBack(entry);
 		size++;
 		return entry;
@@ -150,12 +150,12 @@ public class HashTableChained implements Dictionary {
 	 *         no entry contains the specified key.
 	 **/
 
-	public Entry find(Object key) {
+	public V find(K key) {
 		try {
-			List<Entry> list = table[compFunction(key.hashCode())];
-			for (Entry entry : list)
+			List<Entry<K, V>> list = table[compFunction(key.hashCode())];
+			for (Entry<K, V> entry : list)
 				if (entry.key().equals(key))
-					return entry;
+					return entry.value();
 		} catch (NullPointerException e) {
 		}
 		// Either no list, or key not in list
@@ -176,15 +176,15 @@ public class HashTableChained implements Dictionary {
 	 *         no entry contains the specified key.
 	 */
 
-	public Entry remove(Object key) {
+	public V remove(K key) {
 		try {
-			List<Entry> list = table[compFunction(key.hashCode())];
-			for (Iterator<Entry> i = list.iterator(); i.hasNext();) {
-				Entry entry = i.next();
+			List<Entry<K, V>> list = table[compFunction(key.hashCode())];
+			for (Iterator<Entry<K, V>> i = list.iterator(); i.hasNext();) {
+				Entry<K, V> entry = i.next();
 				if (entry.key().equals(key)) {
 					i.remove();
 					size--;
-					return entry;
+					return entry.value();
 				}
 			}
 		} catch (NullPointerException e) {
