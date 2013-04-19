@@ -90,8 +90,8 @@ public class WUGraph {
    * Running time:  O(d), where d is the degree of "vertex".
    */
   public void removeVertex(Object vertex){
-	  Vertex v = vertexTable.find(vertex);
-	  if(v != null){
+	  if(isVertex(vertex)){
+		  Vertex v = vertexTable.find(vertex);
 		  DList<Edge> edges = v.adjacencyList;
 		  for(Edge edge : edges){
 			  removeEdge(edge.vertexPair.object1, edge.vertexPair.object2);
@@ -175,8 +175,7 @@ public class WUGraph {
 		if (isEdge(u, v)) {
 			// Edge already present, update the weights
 			edgeTable.find(new VertexPair(u, v)).weight = weight;
-		}
-		else {
+		} else {
 			// Construct the edge and add it to edgeTable
 			Edge edge = new Edge(vertexTable.find(u), vertexTable.find(v), weight);
 			edgeTable.insert(new VertexPair(u, v), edge);
@@ -228,7 +227,8 @@ public class WUGraph {
 	public int weight(Object u, Object v) {
 		if (isEdge(u, v)) {
 			return edgeTable.find(new VertexPair(u, v)).weight;
+		} else {
+			return 0;
 		}
-		return 0;
 	}
 }

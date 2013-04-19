@@ -9,6 +9,15 @@ public class Edge {
 	protected int weight;
 	protected ListNode<Edge> node1, node2; 
 	
+	/**
+	 * An Edge keeps track of its VertexPair and weight. Additionally, it adds
+	 * itself to the adjacency lists of v1 (and v2, if they are different), and
+	 * keeps a reference to the created node(s).
+	 * 
+	 * @param v1
+	 * @param v2
+	 * @param weight
+	 */
 	public Edge(Vertex v1, Vertex v2, int weight){
 		vertexPair = new VertexPair(v1.item, v2.item);
 		this.weight = weight;
@@ -35,6 +44,9 @@ public class Edge {
 				+ vertexPair.object2 + ", weight: " + weight;
 	}
 
+	/**
+	 * removeFromLists() removes the nodes containing this Edge from their lists
+	 */
 	public void removefromLists() {
 		try {
 			node1.remove();

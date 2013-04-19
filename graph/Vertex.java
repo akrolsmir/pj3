@@ -4,18 +4,21 @@ import list.*;
 
 public class Vertex {
 	
-	protected DList<Edge> adjacencyList;
+	protected DList<Edge> adjacencyList = new DList<Edge>();;
 	protected Object item;
 	protected ListNode<Vertex> node; 
 	
 	/**
+	 * A Vertex contains references to its item, an adjacency list of Edges, and
+	 * the node that contains it. The constructor takes in the item, as well as
+	 * the list of vertices to which the Vertex will add itself.
 	 * 
-	 * @param o
+	 * @param item
+	 * @param list
 	 */
-	public Vertex(Object o, List<Vertex> l){
-		adjacencyList = new DList<Edge>();
-		item = o;
-		node = l.insertBack(this);
+	public Vertex(Object item, List<Vertex> list){
+		this.item = item;
+		node = list.insertBack(this);
 	}
 	
 	@Override
@@ -24,12 +27,14 @@ public class Vertex {
 				&& item.equals(((Vertex) obj).item);
 	}
 
+	/**
+	 * removeFromList() removes the node containing this Vertex from its list
+	 */
 	public void removeFromList() {
 		try {
 			node.remove();
 		} catch (InvalidNodeException e) {
 			// Shouldn't ever happen
 		}
-		
 	}
 }
