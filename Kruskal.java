@@ -17,6 +17,9 @@ public class Kruskal {
 	/**
 	 * minSpanTree() returns a WUGraph that represents the minimum spanning tree
 	 * of the WUGraph g. The original WUGraph g is NOT changed.
+	 * 
+	 * @param g The WUGraph from which to run Kruskal's algorithm on
+	 * @return a WUGraph that represents the minimum spanning tree
 	 */
 	public static WUGraph minSpanTree(WUGraph g) {
 		WUGraph minSpanTree = new WUGraph();
@@ -28,7 +31,7 @@ public class Kruskal {
 			verticeHash.insert(copyVertices[i], i);
 		}
 
-		Edge[] arrayEdges = getEdge(g);
+		KEdge[] arrayEdges = getEdge(g);
 		heapLength = arrayEdges.length;
 		arrayLength = arrayEdges.length;
 		arrayEdges = toHeap(arrayEdges);
@@ -37,7 +40,7 @@ public class Kruskal {
 		DisjointSets dSet = new DisjointSets(copyVertices.length);
 
 		for (int i = 0; i < arrayLength; i++) {
-			Edge edge = arrayEdges[i];
+			KEdge edge = arrayEdges[i];
 			int vertice1, vertice2;
 			vertice1 = verticeHash.find(edge.getVertex().object1);
 			vertice2 = verticeHash.find(edge.getVertex().object2);
@@ -50,15 +53,22 @@ public class Kruskal {
 		return minSpanTree;
 	}
 
-	private static Edge[] getEdge(WUGraph g) {
+	/**
+	 * getEdge() creates an array of KEdges that are representative 
+	 * of the edges in graph g and returns that array.
+	 * 
+	 * @param g
+	 * @return
+	 */
+	private static KEdge[] getEdge(WUGraph g) {
 		Object[] copyVertices = g.getVertices();
 		int edgeCount = 0;
-		Edge[] arrayEdges = new Edge[g.edgeCount()];
+		KEdge[] arrayEdges = new KEdge[g.edgeCount()];
 		for (int i = 0; i < copyVertices.length; i++) {
 			Neighbors neighbor = g.getNeighbors(copyVertices[i]);
 			for (int j = 0; j < neighbor.neighborList.length; j++) {
 				boolean inArray = false;
-				Edge edge = new Edge(copyVertices[i], neighbor.neighborList[j],
+				KEdge edge = new KEdge(copyVertices[i], neighbor.neighborList[j],
 						neighbor.weightList[j]);
 				for (int k = 0; k < edgeCount; k++) {
 					if (arrayEdges[k].equals(edge)) {
@@ -75,8 +85,15 @@ public class Kruskal {
 		return arrayEdges;
 	}
 
-	private static Edge[] toHeap(Edge[] array) {
-		Edge[] newArray = new Edge[array.length];
+	/**
+	 * toHeap() takes in an array of KEdges and re-orders it to satisfy 
+	 * the heap order invariant.
+	 * 
+	 * @param array an array of KEdges
+	 * @return an array of KEdges satisfying the heap order invariant
+	 */
+	private static KEdge[] toHeap(KEdge[] array) {
+		KEdge[] newArray = new KEdge[array.length];
 		for (int i = 0; i < array.length; i++) {
 			newArray[i] = array[i];
 			heapUp(newArray, i);
@@ -84,13 +101,20 @@ public class Kruskal {
 		return newArray;
 	}
 
-	private static void heapUp(Edge[] array, int length) {
+	/**
+	 * heapUp() takes in an array with the given length and checks from
+	 * the bottom if the heap order invariant is satisfied.
+	 * 
+	 * @param array an array of KEdges
+	 * @param length the length of the KEdge array
+	 */
+	private static void heapUp(KEdge[] array, int length) {
 		int i = length + 1;
 		while (i != 1) {
 			if (i % 2 == 1) {
 				if (Math.min(array[i - 1].getWeight(), array[i - 2].getWeight()) < array[(i - 3) / 2]
 						.getWeight()) {
-					Edge temp = array[(i - 3) / 2];
+					KEdge temp = array[(i - 3) / 2];
 					if (array[i - 1].getWeight() < array[i - 2].getWeight()) {
 						array[(i - 3) / 2] = array[i - 1];
 						array[i - 1] = temp;
@@ -102,7 +126,7 @@ public class Kruskal {
 				i -= 2;
 			} else {
 				if (array[i - 1].getWeight() < array[i / 2 - 1].getWeight()) {
-					Edge temp = array[i / 2 - 1];
+					KEdge temp = array[i / 2 - 1];
 					array[i / 2 - 1] = array[i - 1];
 					array[i - 1] = temp;
 				}
@@ -112,8 +136,15 @@ public class Kruskal {
 		return;
 	}
 
-	private static Edge[] heapSort(Edge[] array) {
-		Edge[] temp = new Edge[heapLength];
+	/**
+	 * heapSort() takes in an array of KEdges and sorts it using
+	 * the heapSort method.
+	 * 
+	 * @param array an array of KEdges
+	 * @return an ordered array of KEdges by weight of each KEdge
+	 */
+	private static KEdge[] heapSort(KEdge[] array) {
+		KEdge[] temp = new KEdge[heapLength];
 		for (int i = 0; i < arrayLength; i++) {
 			temp[i] = removeMin(array);
 		}
@@ -121,14 +152,21 @@ public class Kruskal {
 		return temp;
 	}
 
-	private static Edge removeMin(Edge[] array) {
-		Edge edge = array[0];
+	/**
+	 * removeMin() takes in an array of KEdges and removes the minimum
+	 * KEdge weight.
+	 * 
+	 * @param array an array of KEdges
+	 * @return the KEdge that was removed
+	 */
+	private static KEdge removeMin(KEdge[] array) {
+		KEdge edge = array[0];
 		array[0] = array[heapLength - 1];
 		int i = 1;
 		while (i <= heapLength / 2
 				&& array[i - 1].getWeight() > Math.min(
 						array[2 * i - 1].getWeight(), array[2 * i].getWeight())) {
-			Edge temp = array[i - 1];
+			KEdge temp = array[i - 1];
 			if (array[2 * i - 1].getWeight() < array[2 * i].getWeight()) {
 				array[i - 1] = array[2 * i - 1];
 				array[2 * i - 1] = temp;

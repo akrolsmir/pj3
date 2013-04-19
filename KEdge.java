@@ -1,8 +1,7 @@
 
-public class Edge {
+public class KEdge {
 
 	protected VertexPair vertexPair;
-	protected Edge partner;
 	protected int weight;
 
 	// Implementation such that creating one edge creates its partner
@@ -18,29 +17,35 @@ public class Edge {
 	// this(vertex1, vertex2, weight, null);
 	// }
 
-	public Edge(Object vertex1, Object vertex2, int weight) {
+	/**
+	 * KEdge() creates an instance of KEdge representing an edge in a 
+	 * WUGraph.
+	 * 
+	 * @param vertex1 a vertex in the edge
+	 * @param vertex2 the other vertex in the edge
+	 * @param weight the weight of the edge
+	 */
+	public KEdge(Object vertex1, Object vertex2, int weight) {
 		vertexPair = new VertexPair(vertex1, vertex2);
 		this.weight = weight;
 	}
-
-	/**
-	 * @param vertex1
-	 * @param vertex2
-	 * @param weight
-	 * @return an array of size 2 containing the two newly formed Edges
-	 */
-	public static Edge[] makeEdges(Object vertex1, Object vertex2, int weight) {
-		Edge edge1 = new Edge(vertex1, vertex2, weight);
-		Edge edge2 = new Edge(vertex1, vertex2, weight);
-		edge1.partner = edge2;
-		edge2.partner = edge1;
-		return new Edge[] { edge1, edge2 };
-	}
 	
+	/**
+	 * getVertex() is a getter function for the vertexPair, 
+	 * the two vertices.
+	 * 
+	 * @return a vertexPair holding both vertices
+	 */
 	public VertexPair getVertex() {
 		return vertexPair;
 	}
 	
+	/**
+	 * getWeight() is a getter function for the weight 
+	 * of the edge.
+	 * 
+	 * @return the weight of the edge
+	 */
 	public int getWeight() {
 		return weight;
 	}
@@ -51,8 +56,8 @@ public class Edge {
 
 	
 	public boolean equals(Object edge) {
-		if (edge instanceof Edge) {
-			return vertexPair.equals(((Edge) edge).vertexPair);
+		if (edge instanceof KEdge) {
+			return vertexPair.equals(((KEdge) edge).vertexPair);
 		} else {
 			return false;
 		}
