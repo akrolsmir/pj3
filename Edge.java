@@ -36,6 +36,14 @@ public class Edge {
 		edge2.partner = edge1;
 		return new Edge[] { edge1, edge2 };
 	}
+	
+	public VertexPair getVertex() {
+		return vertexPair;
+	}
+	
+	public int getWeight() {
+		return weight;
+	}
 
 	public String toString() {
 		return "" + weight;

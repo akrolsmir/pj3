@@ -32,22 +32,18 @@ public class Kruskal {
 		heapLength = arrayEdges.length;
 		arrayLength = arrayEdges.length;
 		arrayEdges = toHeap(arrayEdges);
-		Edge[] temp = new Edge[heapLength];
-		for (int i = 0; i < arrayLength; i++) {
-			temp[i] = removeMin(arrayEdges);
-		}
-		arrayEdges = temp;
+		arrayEdges = heapSort(arrayEdges);
 
 		DisjointSets dSet = new DisjointSets(copyVertices.length);
 
 		for (int i = 0; i < arrayLength; i++) {
 			Edge edge = arrayEdges[i];
 			int vertice1, vertice2;
-			vertice1 = verticeHash.find(edge.vertexPair.object1);
-			vertice2 = verticeHash.find(edge.vertexPair.object2);
+			vertice1 = verticeHash.find(edge.getVertex().object1);
+			vertice2 = verticeHash.find(edge.getVertex().object2);
 			if (dSet.find(vertice1) != dSet.find(vertice2)) {
-				minSpanTree.addEdge(edge.vertexPair.object1,
-						edge.vertexPair.object2, edge.weight);
+				minSpanTree.addEdge(edge.getVertex().object1,
+						edge.getVertex().object2, edge.getWeight());
 				dSet.union(dSet.find(vertice1), dSet.find(vertice2));
 			}
 		}
@@ -71,14 +67,14 @@ public class Kruskal {
 					}
 				}
 				if (!inArray) {
-					arrayEdges[edgeCount] = edge;					
+					arrayEdges[edgeCount] = edge;
 					edgeCount++;
 				}
 			}
 		}
 		return arrayEdges;
 	}
-	
+
 	private static Edge[] toHeap(Edge[] array) {
 		Edge[] newArray = new Edge[array.length];
 		for (int i = 0; i < array.length; i++) {
@@ -87,14 +83,15 @@ public class Kruskal {
 		}
 		return newArray;
 	}
-	
+
 	private static void heapUp(Edge[] array, int length) {
 		int i = length + 1;
 		while (i != 1) {
 			if (i % 2 == 1) {
-				if (Math.min(array[i - 1].weight, array[i - 2].weight) < array[(i - 3) / 2].weight) {
+				if (Math.min(array[i - 1].getWeight(), array[i - 2].getWeight()) < array[(i - 3) / 2]
+						.getWeight()) {
 					Edge temp = array[(i - 3) / 2];
-					if (array[i - 1].weight < array[i - 2].weight) {
+					if (array[i - 1].getWeight() < array[i - 2].getWeight()) {
 						array[(i - 3) / 2] = array[i - 1];
 						array[i - 1] = temp;
 					} else {
@@ -104,7 +101,7 @@ public class Kruskal {
 				}
 				i -= 2;
 			} else {
-				if (array[i - 1].weight < array[i / 2 - 1].weight) {
+				if (array[i - 1].getWeight() < array[i / 2 - 1].getWeight()) {
 					Edge temp = array[i / 2 - 1];
 					array[i / 2 - 1] = array[i - 1];
 					array[i - 1] = temp;
@@ -115,15 +112,24 @@ public class Kruskal {
 		return;
 	}
 
+	private static Edge[] heapSort(Edge[] array) {
+		Edge[] temp = new Edge[heapLength];
+		for (int i = 0; i < arrayLength; i++) {
+			temp[i] = removeMin(array);
+		}
+		array = temp;
+		return temp;
+	}
+
 	private static Edge removeMin(Edge[] array) {
 		Edge edge = array[0];
 		array[0] = array[heapLength - 1];
 		int i = 1;
 		while (i <= heapLength / 2
-				&& array[i - 1].weight > Math.min(array[2 * i - 1].weight,
-						array[2 * i].weight)) {
+				&& array[i - 1].getWeight() > Math.min(
+						array[2 * i - 1].getWeight(), array[2 * i].getWeight())) {
 			Edge temp = array[i - 1];
-			if (array[2 * i - 1].weight < array[2 * i].weight) {
+			if (array[2 * i - 1].getWeight() < array[2 * i].getWeight()) {
 				array[i - 1] = array[2 * i - 1];
 				array[2 * i - 1] = temp;
 				i *= 2;
