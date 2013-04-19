@@ -128,6 +128,9 @@ public class HashTableChained<K, V> {
 	 **/
 
 	public Entry<K, V> insert(K key, V value) {
+		if(load() >= 1){
+			this.resize();
+		}
 		Entry<K, V> entry = new DEntry<K, V>(key, value);
 		int comp = compFunction(key.hashCode());
 		if (table[comp] == null)
@@ -135,6 +138,22 @@ public class HashTableChained<K, V> {
 		table[comp].insertBack(entry);
 		size++;
 		return entry;
+	}
+	
+	private void resize(){
+		HashTableChained<K,V> newHash = new HashTableChained<K,V>(size * 2);
+		for(int i = 0; i < size; i++){
+			if(table[i] != null){
+				for(Entry<K, V> entry: table[i]){
+					newHash.insert(entry.key, entry.value);
+				}
+			}
+		}
+		table = newHash.table;
+	}
+	
+	private double load(){
+		return size * 1.0/table.length;
 	}
 
 	/**
@@ -222,6 +241,10 @@ public class HashTableChained<K, V> {
 		System.out.println(h.size());
 		h.makeEmpty();
 		System.out.println(h.isEmpty());
+		for(int i = 0; i < 100000; i++){
+			h.insert(new Integer(i), "hi");
+			System.out.println(h.table.length);
+		}
 	}
 
 }
