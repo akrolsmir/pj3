@@ -50,3 +50,16 @@ Fields:
 		//Hash Table of edges in the graph. Keys are the vertexpairs that are a part of an
 		//edge, Values are the representation of the edge themselves.
 	private DList<Vertex> vertexList; //List of vertices in the graph
+	
+Discussion of important methods:
+	public void removeVertex(Object vertex)
+		--Intended to run on O(d) time.
+			*We achieved this by allowing each vertex to be accessed in O(1) time through a hash table, namely
+			HashTableChained vertexTable. Then each vertex has access to the list of edges that are connected to
+			it, which is of size d. Each edge must be removed from the graph by removeEdge, which takes O(1) time
+			because that only involves removing a reference to the edge from edgeTable (a hash table).
+			Afterwards, the vertex itself must be removed from vertexList. But since each vertex contains a reference
+			to the ListNode they contain, we can call remove() from the vertex's node without having to search for it
+			directly in vertexList. So instead of taking O(|V|) time, it would instead take O(1) time to remove
+			the vertex from the list of vertices stored in WUGraph. Finally, vertexCount must be decremented, which
+			takes O(1) time. So removeVertex(Object vertex) at worst case will take O(d) time.
