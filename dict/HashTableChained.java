@@ -26,6 +26,12 @@ public class HashTableChained<K, V> {
 	private List<Entry<K, V>>[] table;
 	private int size = 0;
 
+	/**
+	 * Implementation of Entry
+	 *
+	 * @param <K> key
+	 * @param <V> value
+	 */
 	private class DEntry<K, V> extends Entry<K, V> {
 		public DEntry(K key, V value) {
 			this.key = key;
@@ -56,7 +62,11 @@ public class HashTableChained<K, V> {
 		table = new List[101];
 	}
 
-	// Finds the smallest prime larger than about.
+	
+	/**
+	 * @param about
+	 * @return the smallest prime larger than about.
+	 */
 	private int findPrime(int about) {
 		for (int p = about; ; p++) {
 			for (int i = 2; i < p; i++)
@@ -67,7 +77,9 @@ public class HashTableChained<K, V> {
 		}
 	}
 	
-	// Outputs number of collisions
+	/**
+	 * @return the number of collisions
+	 */
 	public int getCollisions()
 	{
 		int lists = 0;
@@ -101,13 +113,12 @@ public class HashTableChained<K, V> {
 	public int size() {
 		return size;
 	}
-
+	
 	/**
 	 * Tests if the dictionary is empty.
 	 * 
 	 * @return true if the dictionary has no entries; false otherwise.
 	 **/
-
 	public boolean isEmpty() {
 		return size == 0;
 	}
@@ -126,9 +137,9 @@ public class HashTableChained<K, V> {
 	 *            an arbitrary object.
 	 * @return an entry containing the key and value.
 	 **/
-
 	public Entry<K, V> insert(K key, V value) {
-		if(load() >= 1){
+		double load = size * 1.0 / table.length;
+		if (load >= 1) {
 			this.resize();
 		}
 		Entry<K, V> entry = new DEntry<K, V>(key, value);
@@ -140,6 +151,9 @@ public class HashTableChained<K, V> {
 		return entry;
 	}
 	
+	/**
+	 * Doubles the hashtable size and rehashes as necessary
+	 */
 	private void resize(){
 		HashTableChained<K,V> newHash = new HashTableChained<K,V>(size * 2);
 		for(int i = 0; i < size; i++){
@@ -150,10 +164,6 @@ public class HashTableChained<K, V> {
 			}
 		}
 		table = newHash.table;
-	}
-	
-	private double load(){
-		return size * 1.0/table.length;
 	}
 
 	/**
@@ -168,7 +178,6 @@ public class HashTableChained<K, V> {
 	 * @return an entry containing the key and an associated value, or null if
 	 *         no entry contains the specified key.
 	 **/
-
 	public V find(K key) {
 		try {
 			List<Entry<K, V>> list = table[compFunction(key.hashCode())];
@@ -194,7 +203,6 @@ public class HashTableChained<K, V> {
 	 * @return an entry containing the key and an associated value, or null if
 	 *         no entry contains the specified key.
 	 */
-
 	public V remove(K key) {
 		try {
 			List<Entry<K, V>> list = table[compFunction(key.hashCode())];
@@ -218,33 +226,6 @@ public class HashTableChained<K, V> {
 	public void makeEmpty() {
 		size = 0;
 		table = new List[table.length];
-	}
-	
-	public static void main(String[] args){
-		List<String> list = new DList<String>();
-		list.insertBack("ONE");
-		list.insertBack("TWO");
-		list.insertBack("THREE");
-		for (Iterator i = list.iterator();i.hasNext();) {
-			if (i.next().equals("TWO")) {
-				i.remove();
-			}
-		}
-		System.out.println(list.toString());
-		
-		HashTableChained h = new HashTableChained();
-		h.insert("key0", "value0");
-		h.insert("key1", "value1");
-		System.out.println(h.size());
-		h.remove("key0");
-		h.remove("key0");
-		System.out.println(h.size());
-		h.makeEmpty();
-		System.out.println(h.isEmpty());
-		for(int i = 0; i < 100000; i++){
-			h.insert(new Integer(i), "hi");
-			System.out.println(h.table.length);
-		}
 	}
 
 }

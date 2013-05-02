@@ -85,6 +85,9 @@ public abstract class List<T> implements Iterable<T> {
 		return new ListIterator(this);
 	}
 
+	/**
+	 * An Iterator for List, so that List can implement Iterable
+	 */
 	private class ListIterator implements Iterator<T> {
 
 		List<T> iList;
