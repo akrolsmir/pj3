@@ -20,11 +20,11 @@ public class KruskalTest {
 
     System.out.println("Adding random edges to graph.");
 
-    Random random = new Random(3);      // Create a "Random" object with seed 0
+    Random random = new Random(3); // Create a "Random" object with seed 0
 
     for (i = 0; i < vertArray.length; i++) {
       for (j = i; j < vertArray.length; j++) {
-        int r = random.nextInt() % MAXINT;                // Between -99 and 99
+        int r = random.nextInt() % MAXINT; // Between -99 and 99
         if (r >= 0) {
           g.addEdge(vertArray[i], vertArray[j], r);
         }
@@ -33,7 +33,7 @@ public class KruskalTest {
   }
 
   public static void DFS(WUGraph t, DFSVertex current, DFSVertex prev,
-                         int[] maxOnPath, int maxEdge) {
+      int[] maxOnPath, int maxEdge) {
     Neighbors neigh;
     int i;
 
@@ -48,9 +48,11 @@ public class KruskalTest {
             tree = false;
             return;
           }
-        } else if (neigh.weightList[i] > maxEdge) {
+        }
+        else if (neigh.weightList[i] > maxEdge) {
           DFS(t, next, current, maxOnPath, neigh.weightList[i]);
-        } else {
+        }
+        else {
           DFS(t, next, current, maxOnPath, maxEdge);
         }
         if (!tree) {
@@ -83,12 +85,12 @@ public class KruskalTest {
       }
     }
 
-//  for (i = 0; i < vertArray.length; i++) {
-//    for (j = 0; j < vertArray.length; j++) {
-//      System.out.print(" " + maxOnPath[i][j]);
-//    }
-//    System.out.println();
-//  }
+    //  for (i = 0; i < vertArray.length; i++) {
+    //    for (j = 0; j < vertArray.length; j++) {
+    //      System.out.print(" " + maxOnPath[i][j]);
+    //    }
+    //    System.out.println();
+    //  }
 
     for (i = 0; i < VERTICES; i++) {
       neigh = g.getNeighbors(vertArray[i]);
@@ -123,30 +125,30 @@ public class KruskalTest {
 
     addRandomEdges(g, vertArray);
 
-//  for (i = 0; i < vertArray.length; i++) {
-//    for (j = 0; j < vertArray.length; j++) {
-//      if (g.isEdge(vertArray[i], vertArray[j])) {
-//        System.out.print(" " + g.weight(vertArray[i], vertArray[j]));
-//      } else {
-//        System.out.print(" *");
-//      }
-//    }
-//    System.out.println();
-//  }
+    //  for (i = 0; i < vertArray.length; i++) {
+    //    for (j = 0; j < vertArray.length; j++) {
+    //      if (g.isEdge(vertArray[i], vertArray[j])) {
+    //        System.out.print(" " + g.weight(vertArray[i], vertArray[j]));
+    //      } else {
+    //        System.out.print(" *");
+    //      }
+    //    }
+    //    System.out.println();
+    //  }
 
     System.out.println("Finding the minimum spanning tree.");
     t = Kruskal.minSpanTree(g);
 
-//  for (i = 0; i < vertArray.length; i++) {
-//    for (j = 0; j < vertArray.length; j++) {
-//      if (t.isEdge(vertArray[i], vertArray[j])) {
-//        System.out.print(" " + t.weight(vertArray[i], vertArray[j]));
-//      } else {
-//        System.out.print(" *");
-//      }
-//    }
-//    System.out.println();
-//  }
+    //  for (i = 0; i < vertArray.length; i++) {
+    //    for (j = 0; j < vertArray.length; j++) {
+    //      if (t.isEdge(vertArray[i], vertArray[j])) {
+    //        System.out.print(" " + t.weight(vertArray[i], vertArray[j]));
+    //      } else {
+    //        System.out.print(" *");
+    //      }
+    //    }
+    //    System.out.println();
+    //  }
 
     DFSTest(g, t, vertArray);
 
@@ -155,11 +157,13 @@ public class KruskalTest {
       if (minTree) {
         System.out.println("Two points for creating a minimum spanning tree.");
         score = 3;
-      } else {
+      }
+      else {
         System.out.println("Not a minimum spanning tree.");
         score = 1;
       }
-    } else {
+    }
+    else {
       System.out.println("Not a tree.");
       score = 0;
     }

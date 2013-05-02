@@ -30,7 +30,8 @@ class VertexPair {
   public int hashCode() {
     if (object1.equals(object2)) {
       return object1.hashCode() + 1;
-    } else {
+    }
+    else {
       return object1.hashCode() + object2.hashCode();
     }
   }
@@ -42,11 +43,12 @@ class VertexPair {
    */
   public boolean equals(Object o) {
     if (o instanceof VertexPair) {
-      return ((object1.equals(((VertexPair) o).object1)) &&
-              (object2.equals(((VertexPair) o).object2))) ||
-             ((object1.equals(((VertexPair) o).object2)) &&
-              (object2.equals(((VertexPair) o).object1)));
-    } else {
+      return ((object1.equals(((VertexPair) o).object1)) && (object2
+          .equals(((VertexPair) o).object2)))
+          || ((object1.equals(((VertexPair) o).object2)) && (object2
+              .equals(((VertexPair) o).object1)));
+    }
+    else {
       return false;
     }
   }

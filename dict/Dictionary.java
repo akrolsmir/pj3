@@ -17,7 +17,7 @@ public interface Dictionary {
    *  @return number of entries in the dictionary.
    **/
 
-  public int size(); 
+  public int size();
 
   /** 
    *  Tests if the dictionary is empty.

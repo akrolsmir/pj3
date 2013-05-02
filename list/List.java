@@ -79,49 +79,49 @@ public abstract class List<T> implements Iterable<T> {
    *  @return a String representation of this List.
    */
   public abstract String toString();
-  
-	@Override
-	public Iterator<T> iterator() {
-		return new ListIterator(this);
-	}
 
-	/**
-	 * An Iterator for List, so that List can implement Iterable
-	 */
-	private class ListIterator implements Iterator<T> {
+  @Override
+  public Iterator<T> iterator() {
+    return new ListIterator(this);
+  }
 
-		List<T> iList;
-		ListNode<T> curr, next;
+  /**
+   * An Iterator for List, so that List can implement Iterable
+   */
+  private class ListIterator implements Iterator<T> {
 
-		private ListIterator(List<T> list) {
-			iList = list;
-			next = iList.front();
-		}
+    List<T> iList;
+    ListNode<T> curr, next;
 
-		@Override
-		public boolean hasNext() {
-			return next.isValidNode();
-		}
+    private ListIterator(List<T> list) {
+      iList = list;
+      next = iList.front();
+    }
 
-		@Override
-		public T next() {
-			try {
-				curr = next;
-				next = next.next();
-				return curr.item();
-			} catch (InvalidNodeException e) {
-				throw new NoSuchElementException();
-			}
-		}
+    @Override
+    public boolean hasNext() {
+      return next.isValidNode();
+    }
 
-		@Override
-		public void remove() {
-			try {
-				curr.remove();
-			} catch (InvalidNodeException e) {
-				throw new NoSuchElementException();
-			}
-		}
-	}
+    @Override
+    public T next() {
+      try {
+        curr = next;
+        next = next.next();
+        return curr.item();
+      } catch (InvalidNodeException e) {
+        throw new NoSuchElementException();
+      }
+    }
+
+    @Override
+    public void remove() {
+      try {
+        curr.remove();
+      } catch (InvalidNodeException e) {
+        throw new NoSuchElementException();
+      }
+    }
+  }
 
 }
