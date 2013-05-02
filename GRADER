@@ -1,0 +1,52 @@
+Data Structures used:
+	-HashTableChained.java (in dict package)
+		*Extends Dictionary.java
+		*Hash Table that uses generic Entries (defined by Entry.java)
+		*Modified to support generic types
+		*Resizes whenever the load factor is greater or equal than 1
+	
+	-Dlist.java (in list package)
+		*Extends List.java
+		*Doubly-Linked List
+		*Modified to support generic types
+	
+	-DListNode.java (in list package)
+		*Extends ListNode.java
+		*Node in a Doubly-Linked List
+		*Modified to support generic types
+
+	-Vertex.java (in graph package)
+		*Representation of a vertex to be used with WUGraph
+		*Contains the following fields:
+			*protected DList<Edge> adjacencyList 
+				//List of edges containing the vertex
+			*protected Object item 
+				//Item that the vertex contains
+			*protected ListNode<Vertex> node 
+				//the ListNode that the vertex is part of
+				//Used as a reference to a WUGraph's list of vertices
+				
+	-Edge.java (in graph package)
+		*Representation of an edge to be used with WUGraph
+		*Contains the following fields:
+			*protected VertexPair vertexpair
+				//Pair of vertices that the edge connects
+			*protected int weight
+				//The weight of the edge
+			*protected ListNode<Edge> node1, node2
+				//References to the nodes that each vertex is a part of
+
+WUGraph
+-------
+Fields:
+	private int vertexCount; 
+		//Number of vertices in the graph
+	private int edgeCount;
+		//Number of edges in the graph
+	private HashTableChained<Object, Vertex> vertexTable; 
+		//Hash Table of vertices in the graph. Keys are objects that are each Vertex's item,
+		//Values are the representation of the vertices themselves.
+	private HashTableChained<VertexPair, Edge> edgeTable; 
+		//Hash Table of edges in the graph. Keys are the vertexpairs that are a part of an
+		//edge, Values are the representation of the edge themselves.
+	private DList<Vertex> vertexList; //List of vertices in the graph
