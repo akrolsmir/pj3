@@ -60,6 +60,10 @@ Fields:
 	private DList<Vertex> vertexList; //List of vertices in the graph
 	
 Discussion of important methods:
+ 	public Object[] getVertices()
+ 		--Intended to run on O(|V|) time
+			*We maintain an adjacency list of vertices within WUGraph. getVertices() traverses through that
+			adjacency list and adds each vertex to an array to return. 
 	public void removeVertex(Object vertex)
 		--Intended to run on O(d) time.
 			*We achieved this by allowing each vertex to be accessed in O(1) time through a hash table, namely
