@@ -36,6 +36,14 @@ Data Structures used:
 			*protected ListNode<Edge> node1, node2
 				//References to the nodes that each vertex is a part of
 
+	-KEdge.java (in default package)
+		*Representation of an edge being used in Kruskal's Algorithm
+		*Contains the following fields:
+			*protected VertexPair vertexpair
+				//Pair of vertices that the edge connects
+			*protected int weight
+				//The weight of the edge
+
 WUGraph
 -------
 Fields:
@@ -63,3 +71,4 @@ Discussion of important methods:
 			directly in vertexList. So instead of taking O(|V|) time, it would instead take O(1) time to remove
 			the vertex from the list of vertices stored in WUGraph. Finally, vertexCount must be decremented, which
 			takes O(1) time. So removeVertex(Object vertex) at worst case will take O(d) time.
+			
